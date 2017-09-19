@@ -1,0 +1,31 @@
+{
+  "name": "etherdisplay",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "precommit": "lint-staged",
+    "flow": "flow",
+    "lint": "eslint src/**/*.js",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "lint-staged": {
+    "*.{js,json,css}": ["prettier --write", "git add"]
+  },
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-scripts": "1.0.13"
+  },
+  "devDependencies": {
+    "enzyme": "^2.9.1",
+    "eslint": "^4.7.1",
+    "flow-bin": "^0.54.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.2.1",
+    "prettier": "^1.7.0",
+    "react-test-renderer": "^15.6.1"
+  }
+}

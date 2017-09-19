@@ -1,0 +1,22 @@
+.EtherBlockPanel-container {
+  display: flex;
+  text-align: left;
+}
+
+.EtherBlockPanel-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.EtherBlockPanel-panel hr {
+  width: 100%;
+}
+
+.EtherBlockPanel-scrollbar {
+  display: flex;
+  text-align: left;
+}
+
+.EtherBlockPanel-container > div {
+  margin-left: 100px;
+}
