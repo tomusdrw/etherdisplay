@@ -1,0 +1,23 @@
+.Header {
+  display: flex;
+  border-bottom: 2px solid #000000;
+  padding: 10px;
+}
+
+.Header-left {
+  display: flex;
+  flex-grow: 1;
+}
+
+.Header-left :nth-child(2) {
+  flex-grow: 1;
+}
+
+.Header-right {
+  display: flex;
+  flex-grow: 1;
+}
+
+.Header-right :nth-child(2) {
+  margin-left: auto;
+}
