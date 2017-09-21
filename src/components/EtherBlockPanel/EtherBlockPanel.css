@@ -5,18 +5,18 @@
 
 .EtherBlockPanel-panel {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
 }
 
 .EtherBlockPanel-panel hr {
   width: 100%;
+  height: 2px;
+  border: 0px;
+  background: #000000;
 }
 
 .EtherBlockPanel-scrollbar {
   display: flex;
   text-align: left;
-}
-
-.EtherBlockPanel-container > div {
-  margin-left: 100px;
 }
