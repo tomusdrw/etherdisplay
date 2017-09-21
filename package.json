@@ -12,7 +12,10 @@
     "eject": "react-scripts eject"
   },
   "lint-staged": {
-    "*.{js,json,css}": ["prettier --write", "git add"]
+    "*.{js,json,css}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "dependencies": {
     "react": "^15.6.1",
