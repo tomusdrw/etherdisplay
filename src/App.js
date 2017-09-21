@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Header from './components/Header';
 import EtherBlock from './components/EtherBlock';
 import EtherBlockPanel from './components/EtherBlockPanel';
 import './App.css';
@@ -7,6 +8,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Header />
         <EtherBlockPanel>
           <EtherBlock
             id={4654343}
