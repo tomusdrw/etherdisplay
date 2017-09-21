@@ -1,0 +1,10 @@
+.ColorBoard-table {
+  border-collapse: collapse;
+  empty-cells: show;
+}
+
+.ColorBoard-table td {
+  width: 18px;
+  height: 18px;
+  border: solid 1px #000000;
+}
