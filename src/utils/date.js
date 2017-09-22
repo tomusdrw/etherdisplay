@@ -2,10 +2,9 @@
 
 // timeSince returns elapesed time from start to Date.now() in pretty string format.
 export function timeSince(start: Date): string {
-  var seconds = Math.floor((new Date() - start) / 1000);
+  let seconds = Math.floor((new Date() - start) / 1000);
 
-  var interval = Math.floor(seconds / 31536000);
-
+  let interval = Math.floor(seconds / 31536000);
   if (interval > 1) {
     return interval + " years ago";
   }
