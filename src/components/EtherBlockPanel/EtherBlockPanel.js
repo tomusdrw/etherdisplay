@@ -24,6 +24,6 @@ export default class EtherBlockPanel extends PureComponent<Props> {
       );
     });
 
-    return <div className="EtherBlockPanel-container">{newChildren}</div>;
+    return <div className="EtherBlockPanel">{newChildren}</div>;
   }
 }

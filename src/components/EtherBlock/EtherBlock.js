@@ -2,6 +2,8 @@
 import React, { PureComponent } from "react";
 import ProgressBar from "../ProgressBar";
 import "./EtherBlock.css";
+import { formatWithComma, toHex } from "../../utils/number";
+import { timeSince } from "../../utils/date";
 
 type Props = {
   id: number,
@@ -27,26 +29,31 @@ export default class EtherBlock extends PureComponent<Props> {
       pending
     } = this.props;
 
-    let gasPercentage = gas * 100 / gasMax;
-    let pendingText = pending ? <p className="transaction">pending</p> : null;
-    let main = pending ? (
-      <span>pending</span>
+    const gasPercentage = (gas * 100 / gasMax).toFixed(2);
+    const pendingText = pending ? <p className="transaction">pending</p> : null;
+    const ago = timeSince(created);
+    const blockId = formatWithComma(id);
+    const hexChain = toHex(chain);
+    const hexAuthor = toHex(author);
+    const progressValue = gasPercentage / 100;
+
+    const main = pending ? (
+      <p>pending</p>
     ) : (
       <div>
-        <span> {chain} </span>
-        <span> {created} </span>
-        <span> Author: {author} </span>
-        <span>
-          {" "}
-          Gas: {gas} / {gasMax} ({gasPercentage}%){" "}
-        </span>
-        <ProgressBar value={gasPercentage / 100} />
+        <p> {hexChain} </p>
+        <p> {ago} </p>
+        <p> Author: {hexAuthor} </p>
+        <p>
+          Gas: {gas} / {gasMax} ({gasPercentage}%)
+        </p>
+        <ProgressBar value={progressValue} />
       </div>
     );
 
     return (
-      <div className="EtherBlock-container">
-        <span> Block #{id} </span>
+      <div className="EtherBlock">
+        <p> Block #{blockId} </p>
         {main}
         <span>
           <p className="transaction">{transactionNo} transactions</p>
