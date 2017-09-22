@@ -8,14 +8,18 @@
   border-radius: 5%;
 }
 
-.EtherBlock p {
+.EtherBlock header {
   margin-left: 10px;
-  margin-right: 10px;
 }
 
-.EtherBlock progress {
-  padding-left: 10px;
-  padding-right: 10px;
+.EtherBlock header > h1 {
+  font-size: 1.5rem;
+}
+
+.EtherBlock section > p,
+.EtherBlock div {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .EtherBlock .transaction {

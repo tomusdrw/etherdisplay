@@ -31,7 +31,7 @@ export default class EtherBlock extends PureComponent<Props> {
 
     const gasPercentage = gas * 100 / gasMax;
     const strGasPercentage = gasPercentage.toFixed(2);
-    const progressValue =  gasPercentage / 100;
+    const progressValue = gasPercentage / 100;
     const pendingText = pending ? <p className="transaction">pending</p> : null;
     const ago = timeSince(created);
     const blockId = formatWithComma(id);
@@ -53,14 +53,16 @@ export default class EtherBlock extends PureComponent<Props> {
     );
 
     return (
-      <div className="EtherBlock">
-        <p> Block #{blockId} </p>
-        {main}
-        <span>
+      <article className="EtherBlock">
+        <header>
+          <h1>Block #{blockId}</h1>
+        </header>
+        <section>{main}</section>
+        <footer>
           <p className="transaction">{transactionNo} transactions</p>
           {pendingText}
-        </span>
-      </div>
+        </footer>
+      </article>
     );
   }
 }
