@@ -1,37 +1,38 @@
-.EtherBlockPanel-container {
+.EtherBlockPanel {
   display: flex;
   text-align: left;
+  margin: 200px 20px 0 20px;
   overflow-y: auto;
-  padding-bottom: 2px;
+  padding-bottom: 3px;
 }
 
-.EtherBlockPanel-container::-webkit-scrollbar {
+.EtherBlockPanel::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
-.EtherBlockPanel-container::-webkit-scrollbar-thumb {
+.EtherBlockPanel::-webkit-scrollbar-thumb {
   background: #f76725;
   border: 0px none #ffffff;
   border-radius: 15px;
 }
-.EtherBlockPanel-container::-webkit-scrollbar-thumb:hover {
+.EtherBlockPanel::-webkit-scrollbar-thumb:hover {
   background: #f76725;
 }
-.EtherBlockPanel-container::-webkit-scrollbar-thumb:active {
+.EtherBlockPanel::-webkit-scrollbar-thumb:active {
   background: #f76725;
 }
-.EtherBlockPanel-container::-webkit-scrollbar-track {
+.EtherBlockPanel::-webkit-scrollbar-track {
   background: #666666;
   border: 0px none #ffffff;
   border-radius: 15px;
 }
-.EtherBlockPanel-container::-webkit-scrollbar-track:hover {
+.EtherBlockPanel::-webkit-scrollbar-track:hover {
   background: #666666;
 }
-.EtherBlockPanel-container::-webkit-scrollbar-track:active {
+.EtherBlockPanel::-webkit-scrollbar-track:active {
   background: #333333;
 }
-.EtherBlockPanel-container::-webkit-scrollbar-corner {
+.EtherBlockPanel::-webkit-scrollbar-corner {
   background: transparent;
 }
 
@@ -43,6 +44,7 @@
 
 .EtherBlockPanel-panel hr {
   width: 100%;
+  min-width: 100px;
   height: 2px;
   border: 0px;
   background: #000000;

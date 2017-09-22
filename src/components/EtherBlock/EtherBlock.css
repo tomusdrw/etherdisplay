@@ -1,6 +1,6 @@
-.EtherBlock-container {
-  width: 300px;
-  height: 300px;
+.EtherBlock {
+  min-width: 300px;
+  min-height: 300px;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -8,23 +8,17 @@
   border-radius: 5%;
 }
 
-/*
-.EtherBlock-container:first-of-type {
-  margin-top: 10px;
-}
-*/
-
-.EtherBlock-container span {
+.EtherBlock p {
   margin-left: 10px;
   margin-right: 10px;
 }
 
-.EtherBlock-container progress {
+.EtherBlock progress {
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.EtherBlock-container .transaction {
+.EtherBlock .transaction {
   text-decoration: underline;
   text-align: center;
 }
