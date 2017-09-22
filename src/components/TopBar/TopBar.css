@@ -1,23 +1,23 @@
-.Header {
+.TopBar {
   display: flex;
   border-bottom: 2px solid #000000;
   padding: 10px;
 }
 
-.Header-left {
+.TopBar-left {
   display: flex;
   flex-grow: 1;
 }
 
-.Header-left :nth-child(2) {
+.TopBar-left :nth-child(2) {
   flex-grow: 1;
 }
 
-.Header-right {
+.TopBar-right {
   display: flex;
   flex-grow: 1;
 }
 
-.Header-right :nth-child(2) {
+.TopBar-right :nth-child(2) {
   margin-left: auto;
 }
