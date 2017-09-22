@@ -5,15 +5,15 @@ import EtherBlock from "../EtherBlock";
 import "./EtherBlockPanel.css";
 
 type Props = {
-  children: ChildrenArray<Element<typeof EtherBlock>[]>
+  children: $ReadOnlyArray<ChildrenArray<Element<typeof EtherBlock>[]>>
 };
 
 export default class EtherBlockPanel extends PureComponent<Props> {
   render() {
-    const { children } = this.props;
+    const { children: childrenProp } = this.props;
 
-    let newChildren = React.Children.map(children, (child, i) => {
-      if (i === children.length - 1) {
+    let children = React.Children.map(childrenProp, (child, i) => {
+      if (i === childrenProp.length - 1) {
         return <div className="EtherBlockPanel-panel">{child}</div>;
       }
       return (
@@ -24,6 +24,6 @@ export default class EtherBlockPanel extends PureComponent<Props> {
       );
     });
 
-    return <div className="EtherBlockPanel">{newChildren}</div>;
+    return <div className="EtherBlockPanel">{children}</div>;
   }
 }
