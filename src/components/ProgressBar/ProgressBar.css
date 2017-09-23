@@ -1,12 +1,21 @@
 .ProgressBar {
   appearance: none;
+  background-color: #000;
   width: 100%;
   height: 3px;
   border: 0;
 }
 
-.ProgressBar::-webkit-progress-bar .ProgressBar::-moz-progress-bar {
+.ProgressBar::-webkit-progress-bar {
   background-color: #000;
+}
+
+.ProgressBar::-moz-progress-bar {
+  background-color: #f76725;
+}
+
+.ProgressBar::-ms-fill {
+  background-color: #f76725;
 }
 
 .ProgressBar::-webkit-progress-value {
