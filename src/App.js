@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import TopBar from "./components/TopBar";
 import ColorBoard from "./components/ColorBoard";
 import EtherBlock from "./components/EtherBlock";
+import EtherBlockBox from "./components/EtherBlockBox";
 import EtherBlockPanel from "./components/EtherBlockPanel";
 import "./App.css";
 /*
@@ -63,6 +64,7 @@ class App extends Component {
             pending
           />
         </EtherBlockPanel>
+        <EtherBlockBox />
       </div>
     );
   }
