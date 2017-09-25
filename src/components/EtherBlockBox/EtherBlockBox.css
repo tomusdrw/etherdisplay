@@ -1,0 +1,72 @@
+.EtherBlockBox {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 700px;
+  height: 450px;
+  border: 1px solid #000000;
+  border-radius: 12px;
+}
+
+.EtherBlockBox-topbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #000000;
+}
+
+.EtherBlockBox-button-export {
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  border: 1px solid #f76725;
+  transition: background 0.1s ease, color 0.1s ease;
+}
+
+.EtherBlockBox-button-export:active {
+  background-color: #f76725;
+  color: #ffffff;
+  transition: background 0.1s ease, color 0.1s ease;
+}
+
+.EtherBlockBox-button-close {
+  position: absolute;
+  height: 25px;
+  width: 25px;
+  top: 20px;
+  right: 10px;
+  font-size: 20px;
+  border: 1px solid #f76725;
+  border-radius: 50%;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.EtherBlockBox-button-close:active {
+  background-color: #f76725;
+  color: #ffffff;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.EtherBlockBox-button-arrow {
+  border: 0;
+  padding: 0;
+  height: auto;
+}
+
+.EtherBlockBox-arrow-next,
+.EtherBlockBox-arrow-prev {
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  border: solid #000000;
+  border-width: 0 0.2rem 0.2rem 0;
+  margin-right: 0.5rem;
+}
+
+.EtherBlockBox-arrow-next {
+  transform: rotate(-45deg);
+}
+
+.EtherBlockBox-arrow-prev {
+  transform: rotate(135deg);
+}
