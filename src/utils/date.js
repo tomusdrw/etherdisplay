@@ -1,8 +1,8 @@
 /* @flow */
 
 // timeSince returns elapesed time from start to Date.now() in pretty string format.
-export function timeSince(start: Date): string {
-  let seconds = Math.floor((new Date() - start) / 1000);
+export function timeSince(start: Date, now: Date = new Date()): string {
+  let seconds = Math.floor((now - start) / 1000);
 
   let interval = Math.floor(seconds / 31536000);
   if (interval > 1) {

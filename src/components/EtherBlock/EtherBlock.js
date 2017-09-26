@@ -1,6 +1,7 @@
 /* @flow */
 import React, { PureComponent } from "react";
 import ProgressBar from "../ProgressBar";
+import Hash from "../Hash";
 import "./EtherBlock.css";
 import { formatWithComma, toHex } from "../../utils/number";
 import { timeSince } from "../../utils/date";
@@ -35,18 +36,24 @@ export default class EtherBlock extends PureComponent<Props> {
     const pendingText = pending ? <p className="transaction">pending</p> : null;
     const ago = timeSince(created);
     const blockId = formatWithComma(id);
-    const hexChain = toHex(chain);
-    const hexAuthor = toHex(author);
+    const hexChain = chain;
+    const hexAuthor = author;
 
     const main = pending ? (
       <p>pending</p>
     ) : (
       <div>
-        <p> {hexChain} </p>
-        <p> {ago} </p>
-        <p> Author: {hexAuthor} </p>
         <p>
-          Gas: {gas} / {gasMax} ({strGasPercentage}%)
+          {" "}
+          <Hash hash={hexChain} />{" "}
+        </p>
+        <p> {ago} </p>
+        <p>
+          {" "}
+          Author: <Hash hash={hexAuthor} />{" "}
+        </p>
+        <p>
+          Gas: {formatWithComma(gas)} / {formatWithComma(gasMax)} ({strGasPercentage}%)
         </p>
         <ProgressBar value={progressValue} />
       </div>
