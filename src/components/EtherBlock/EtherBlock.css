@@ -25,4 +25,5 @@
 .EtherBlock .transaction {
   text-decoration: underline;
   text-align: center;
+  cursor: pointer;
 }

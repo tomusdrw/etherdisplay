@@ -70,3 +70,17 @@
 .EtherBlockBox-arrow-prev {
   transform: rotate(135deg);
 }
+
+.Item {
+  text-align: left;
+  line-height: 2rem;
+}
+.Item-label {
+  display: inline-block;
+  width: 7rem;
+  text-align: right;
+  margin-right: 0.2rem;
+}
+.Item-content {
+  display: inline-block;
+}

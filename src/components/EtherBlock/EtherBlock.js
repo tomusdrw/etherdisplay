@@ -14,7 +14,8 @@ type Props = {
   gas: number,
   gasMax: number,
   transactionNo: number,
-  pending: boolean
+  pending: boolean,
+  onDetails: () => void
 };
 
 export default class EtherBlock extends PureComponent<Props> {
@@ -66,7 +67,9 @@ export default class EtherBlock extends PureComponent<Props> {
         </header>
         <section>{main}</section>
         <footer>
-          <p className="transaction">{transactionNo} transactions</p>
+          <p className="transaction" onClick={this.props.onDetails}>
+            {transactionNo} transactions
+          </p>
           {pendingText}
         </footer>
       </article>

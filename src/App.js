@@ -14,6 +14,10 @@ import "./App.css";
 
 class App extends Component {
   state = {
+    // TODO [ToDr] Replace with router
+    view: "list",
+    selectedBlock: null,
+
     latestBlockNumber: 0,
     blocks: [],
     pending: null,
@@ -85,7 +89,8 @@ class App extends Component {
       latestBlockNumber,
       averageTxs,
       averageGasPrice,
-      etherPrice
+      etherPrice,
+      view
     } = this.state;
     const latestBlockTime = this.latestBlockTime();
 
@@ -101,9 +106,31 @@ class App extends Component {
             etherPrice
           }}
         />
-        {this.renderBlocks()}
-        <EtherBlockBox />
+        {view === "list" ? this.renderBlocks() : null}
+        {view === "details" ? this.renderDetails() : null}
       </div>
+    );
+  }
+
+  renderDetails() {
+    const { selectedBlock, blocks, pending } = this.state;
+    let block = blocks.find(block => block.number.eq(selectedBlock));
+
+    if (!block) {
+      block = pending;
+    }
+
+    return (
+      <EtherBlockBox
+        {...block}
+        hideNext={block === pending}
+        onClose={() => {
+          this.setState({ view: "list" });
+        }}
+        onChangeBlock={selectedBlock => {
+          this.setState({ selectedBlock });
+        }}
+      />
     );
   }
 
@@ -123,6 +150,7 @@ class App extends Component {
     if (!block) {
       return null;
     }
+
     const {
       author,
       hash,
@@ -143,6 +171,12 @@ class App extends Component {
         gasMax={gasLimit.toNumber()}
         transactionNo={transactions.length}
         pending={pending}
+        onDetails={() => {
+          this.setState({
+            view: "details",
+            selectedBlock: number
+          });
+        }}
       />
     );
   }
