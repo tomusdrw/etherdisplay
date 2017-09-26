@@ -50,7 +50,6 @@
 .EtherBlockBox-button-arrow {
   border: 0;
   padding: 0;
-  height: auto;
 }
 
 .EtherBlockBox-arrow-next,
@@ -59,14 +58,14 @@
   width: 0.4rem;
   height: 0.4rem;
   border: solid #000000;
-  border-width: 0 0.2rem 0.2rem 0;
-  margin-right: 0.5rem;
 }
 
 .EtherBlockBox-arrow-next {
+  border-width: 0 0.2rem 0.2rem 0;
   transform: rotate(-45deg);
 }
 
 .EtherBlockBox-arrow-prev {
-  transform: rotate(135deg);
+  border-width: 0.2rem 0 0 0.2rem;
+  transform: rotate(-45deg);
 }
