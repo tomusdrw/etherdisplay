@@ -16,6 +16,7 @@
   "dependencies": {
     "big-integer": "^1.6.25",
     "ethereum-blockies": "^0.1.1",
+    "normalize.css": "^7.0.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-router-dom": "^4.2.2",
