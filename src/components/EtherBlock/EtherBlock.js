@@ -1,38 +1,41 @@
 /* @flow */
 import React, { PureComponent } from "react";
+import { Link } from "react-router-dom";
 import ProgressBar from "../ProgressBar";
-import "./EtherBlock.css";
 import { formatWithComma, toHex } from "../../utils/number";
 import { timeSince } from "../../utils/date";
+import "./EtherBlock.css";
 
 type Props = {
-  id: number,
   author: number,
   chain: number,
   created: Date,
   gas: number,
   gasMax: number,
-  transactionNo: number,
-  pending: boolean
+  id: number,
+  pending: boolean,
+  transactionNo: number
 };
 
 export default class EtherBlock extends PureComponent<Props> {
   render() {
     const {
-      id,
       author,
       chain,
       created,
       gas,
       gasMax,
-      transactionNo,
-      pending
+      id,
+      pending,
+      transactionNo
     } = this.props;
 
     const gasPercentage = gas * 100 / gasMax;
     const strGasPercentage = gasPercentage.toFixed(2);
     const progressValue = gasPercentage / 100;
     const pendingText = pending ? <p className="transaction">pending</p> : null;
+
+    // TODO: move to willReaciveProps
     const ago = timeSince(created);
     const blockId = formatWithComma(id);
     const hexChain = toHex(chain);
@@ -55,7 +58,9 @@ export default class EtherBlock extends PureComponent<Props> {
     return (
       <article className="EtherBlock">
         <header>
-          <h1>Block #{blockId}</h1>
+          <h1>
+            <Link to={`/block/${id}`}>Block #{blockId}</Link>
+          </h1>
         </header>
         <section>{main}</section>
         <footer>
