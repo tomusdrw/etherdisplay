@@ -1010,6 +1010,10 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+big-integer@^1.6.25:
+  version "1.6.25"
+  resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.25.tgz#1de45a9f57542ac20121c682f8d642220a34e823"
+
 big.js@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-3.1.3.tgz#4cada2193652eb3ca9ec8e55c9015669c9806978"
@@ -2373,6 +2377,10 @@ esutils@^2.0.2:
 etag@~1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.0.tgz#6f631aef336d6c46362b51764044ce216be3c051"
+
+ethereum-blockies@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/ethereum-blockies/-/ethereum-blockies-0.1.1.tgz#879fe959deef492a7a92b43dc34ae8dc2ee591fc"
 
 event-emitter@~0.3.5:
   version "0.3.5"
