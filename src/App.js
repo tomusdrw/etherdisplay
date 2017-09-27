@@ -1,9 +1,10 @@
+/* @flow */
 import { Api } from "@parity/parity.js";
 import { range } from "lodash";
-
 import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
 import TopBar from "./components/TopBar";
-import ColorBoard from "./components/ColorBoard";
 import EtherBlock from "./components/EtherBlock";
 import EtherBlockBox from "./components/EtherBlockBox";
 import EtherBlockPanel from "./components/EtherBlockPanel";
@@ -14,10 +15,6 @@ import "./App.css";
 
 class App extends Component {
   state = {
-    // TODO [ToDr] Replace with router
-    view: "list",
-    selectedBlock: null,
-
     latestBlockNumber: 0,
     blocks: [],
     pending: null,
@@ -89,8 +86,7 @@ class App extends Component {
       latestBlockNumber,
       averageTxs,
       averageGasPrice,
-      etherPrice,
-      view
+      etherPrice
     } = this.state;
     const latestBlockTime = this.latestBlockTime();
 
@@ -106,32 +102,36 @@ class App extends Component {
             etherPrice
           }}
         />
-        {view === "list" ? this.renderBlocks() : null}
-        {view === "details" ? this.renderDetails() : null}
+        <Router>
+          <Switch>
+            <Route exact path="/" render={() => this.renderBlocks()} />
+            <Route
+              path="/block/:id"
+              render={({ match }) => this.renderDetails(match.params.id)}
+            />
+          </Switch>
+        </Router>
       </div>
     );
   }
 
-  renderDetails() {
-    const { selectedBlock, blocks, pending } = this.state;
+  renderDetails(selectedBlock) {
+    const { blocks, pending } = this.state;
     let block = blocks.find(block => block.number.eq(selectedBlock));
 
     if (!block) {
       block = pending;
     }
 
-    return (
-      <EtherBlockBox
-        {...block}
-        hideNext={block === pending}
-        onClose={() => {
-          this.setState({ view: "list" });
-        }}
-        onChangeBlock={selectedBlock => {
-          this.setState({ selectedBlock });
-        }}
-      />
-    );
+    if (!block) {
+      return (
+        <div>
+          <h1>Loading...</h1>
+        </div>
+      );
+    }
+
+    return <EtherBlockBox {...block} hideNext={block === pending} />;
   }
 
   renderBlocks() {
@@ -171,12 +171,6 @@ class App extends Component {
         gasMax={gasLimit.toNumber()}
         transactionNo={transactions.length}
         pending={pending}
-        onDetails={() => {
-          this.setState({
-            view: "details",
-            selectedBlock: number
-          });
-        }}
       />
     );
   }

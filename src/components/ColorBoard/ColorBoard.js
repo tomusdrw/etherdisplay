@@ -45,13 +45,16 @@ export default class ColorBoard extends PureComponent<Props> {
       case order.TopToBottom:
         for (let color of colors) {
           // color the td
+          console.log(color);
         }
         break;
       case order.LeftToRight:
         for (let color of colors) {
           // color the td
+          console.log(color);
         }
         break;
+      default:
     }
 
     return (

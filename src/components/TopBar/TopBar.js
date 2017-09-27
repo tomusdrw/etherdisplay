@@ -24,7 +24,7 @@ export default class Header extends PureComponent<Props> {
     this.interval = window.setInterval(() => {
       const currentTime = new Date();
       this.setState({ currentTime });
-    }, 500);
+    }, 750);
   }
 
   componentWillUnmount() {
@@ -40,6 +40,7 @@ export default class Header extends PureComponent<Props> {
     const { averageTxs, averageGasPrice, etherPrice } = this.props;
     const gwei = new BigNumber("1e9");
     const ether = new BigNumber("1e18");
+    const transfer = new BigNumber(21000);
 
     return (
       <div className="TopBar">
@@ -57,8 +58,9 @@ export default class Header extends PureComponent<Props> {
               .toFormat(2)}{" "}
             Gwei (${averageGasPrice
               .mul(etherPrice)
+              .mul(transfer)
               .dividedBy(ether)
-              .toFormat(5)})
+              .toFormat(5)}/tx)
           </span>
           <span>${etherPrice} / ETH</span>
         </div>

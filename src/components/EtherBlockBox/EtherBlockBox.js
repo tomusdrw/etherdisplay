@@ -1,9 +1,9 @@
 /* @flow */
 import React, { PureComponent } from "react";
-import ProgressBar from "../ProgressBar";
+import { Link } from "react-router-dom";
+
+import { formatWithComma, hexToBigNum } from "../../utils/number";
 import "./EtherBlockBox.css";
-import { formatWithComma, toHex, hexToBigNum } from "../../utils/number";
-import { timeSince } from "../../utils/date";
 
 type Props = {
   hash: string,
@@ -18,9 +18,7 @@ type Props = {
   totalDifficulty: BigNumber,
   number: BigNumber,
   transactions: any,
-  hideNext: boolean,
-  onChangeBlock: number => void,
-  onClose: () => void
+  hideNext: boolean
 };
 
 export default class EtherBlockBox extends PureComponent<Props> {
@@ -39,12 +37,9 @@ export default class EtherBlockBox extends PureComponent<Props> {
           {this.renderPrevButton()}
           <h2> Block #{formatWithComma(number)} </h2>
           {this.renderNextButton()}
-          <button
-            className="EtherBlockBox-button-close"
-            onClick={this.props.onClose}
-          >
-            ×
-          </button>
+          <Link to="/">
+            <button className="EtherBlockBox-button-close">×</button>
+          </Link>
         </div>
         {this.renderMenu()}
         {tab === "details" ? this.renderDetails() : null}
@@ -113,9 +108,9 @@ export default class EtherBlockBox extends PureComponent<Props> {
     return (
       <div style={{ textAlign: "left " }}>
         {transactions.map((tx, id) => (
-          <div>
+          <div key={tx.hash}>
             <div>#{id + 1}</div>
-            <pre key={tx.hash}>{JSON.stringify(tx, null, 2)}</pre>
+            <pre>{JSON.stringify(tx, null, 2)}</pre>
           </div>
         ))}
       </div>
@@ -123,33 +118,31 @@ export default class EtherBlockBox extends PureComponent<Props> {
   }
 
   renderPrevButton() {
-    const { number, onChangeBlock } = this.props;
+    const { number } = this.props;
     if (number.eq(0)) {
       return null;
     }
 
     return (
-      <button
-        className="EtherBlockBox-button-arrow"
-        onClick={() => onChangeBlock(number.minus(1))}
-      >
-        <i className="EtherBlockBox-arrow-prev" />
-      </button>
+      <Link to={`/block/${number.minus(1)}`}>
+        <button className="EtherBlockBox-button-arrow">
+          <i className="EtherBlockBox-arrow-prev" />
+        </button>
+      </Link>
     );
   }
   renderNextButton() {
-    const { number, onChangeBlock, hideNext } = this.props;
+    const { number, hideNext } = this.props;
     if (hideNext) {
       return null;
     }
 
     return (
-      <button
-        className="EtherBlockBox-button-arrow"
-        onClick={() => onChangeBlock(number.plus(1))}
-      >
-        <i className="EtherBlockBox-arrow-next" />
-      </button>
+      <Link to={`/block/${number.plus(1)}`}>
+        <button className="EtherBlockBox-button-arrow">
+          <i className="EtherBlockBox-arrow-next" />
+        </button>
+      </Link>
     );
   }
 }
