@@ -1,6 +1,7 @@
 /* @flow */
 import React, { PureComponent } from "react";
 import BigNumber from "bignumber.js";
+import { Link } from "react-router-dom";
 
 import { timeSince } from "../../utils/date";
 import { formatWithComma } from "../../utils/number";
@@ -45,9 +46,14 @@ export default class Header extends PureComponent<Props> {
     return (
       <div className="TopBar">
         <div className="TopBar-left">
-          <span>{chain.toUpperCase()}</span>
           <span>
-            #{formatWithComma(latestBlockNumber)} ({this.time()})
+            <Link to="/">{chain.toUpperCase()}</Link>
+          </span>
+          <span>
+            <Link to={`/block/${latestBlockNumber}`}>
+              #{formatWithComma(latestBlockNumber)}
+            </Link>{" "}
+            ({this.time()})
           </span>
         </div>
         <div className="TopBar-right">
@@ -62,7 +68,7 @@ export default class Header extends PureComponent<Props> {
               .dividedBy(ether)
               .toFormat(5)}/tx)
           </span>
-          <span>${etherPrice} / ETH</span>
+          <span>${etherPrice} = 1Ξ</span>
         </div>
       </div>
     );

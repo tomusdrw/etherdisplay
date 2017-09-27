@@ -17,6 +17,8 @@ class App extends Component {
   state = {
     latestBlockNumber: 0,
     blocks: [],
+    fetchedBlocks: {},
+    fetchInProgress: false,
     pending: null,
     chain: "kovan",
     averageTxs: 0,
@@ -40,10 +42,9 @@ class App extends Component {
 
   refreshBlocks(number) {
     const min = Math.max(0, number - 10);
-    Promise.all(
-      range(min, number)
-        .concat("pending")
-        .map(number => this.api.eth.getBlockByNumber(number, true))
+    this.fetchBlocks(
+      range(min, number).concat("pending"),
+      true
     ).then(blocks => {
       const pending = blocks.pop();
       this.setState({
@@ -55,6 +56,45 @@ class App extends Component {
     });
   }
 
+  fetchBlocks(range, force = false) {
+    if (!this.api) {
+      return;
+    }
+
+    const { fetchedBlocks, fetchInProgress } = this.state;
+    const blocks = range
+      .filter(number => force || !fetchedBlocks[number])
+      .map(number => this.api.eth.getBlockByNumber(number, true));
+
+    if (!blocks.length) {
+      return;
+    }
+
+    if (!fetchInProgress) {
+      setTimeout(() => {
+        this.setState({ fetchInProgress: true });
+      });
+    }
+    return Promise.all(blocks).then(blocks => {
+      this.updateFetchedBlocks(blocks);
+      return blocks;
+    });
+  }
+
+  updateFetchedBlocks(blocks) {
+    const { fetchedBlocks } = this.state;
+    blocks.forEach(block => {
+      fetchedBlocks[block.number] = block;
+    });
+    // TODO [ToDr] Clear old blocks after some time to prevent mem leaks.
+    this.setState({
+      fetchInProgress: false,
+      fetchedBlocks: {
+        ...fetchedBlocks
+      }
+    });
+  }
+
   getStats(blocks) {
     const transactions = blocks.reduce(
       (acc, block) => acc.concat(block.transactions),
@@ -62,7 +102,7 @@ class App extends Component {
     );
     const totalGasPrice = transactions.reduce(
       (acc, tx) => hexToBigNum(tx.gasPrice).add(acc),
-      0
+      hexToBigNum("0x0")
     );
 
     const averageTxs = transactions.length / blocks.length;
@@ -91,18 +131,18 @@ class App extends Component {
     const latestBlockTime = this.latestBlockTime();
 
     return (
-      <div className="App">
-        <TopBar
-          {...{
-            chain,
-            latestBlockNumber,
-            latestBlockTime,
-            averageTxs,
-            averageGasPrice,
-            etherPrice
-          }}
-        />
-        <Router>
+      <Router>
+        <div className="App">
+          <TopBar
+            {...{
+              chain,
+              latestBlockNumber,
+              latestBlockTime,
+              averageTxs,
+              averageGasPrice,
+              etherPrice
+            }}
+          />
           <Switch>
             <Route exact path="/" render={() => this.renderBlocks()} />
             <Route
@@ -110,16 +150,18 @@ class App extends Component {
               render={({ match }) => this.renderDetails(match.params.id)}
             />
           </Switch>
-        </Router>
-      </div>
+        </div>
+      </Router>
     );
   }
 
   renderDetails(selectedBlock) {
-    const { blocks, pending } = this.state;
-    let block = blocks.find(block => block.number.eq(selectedBlock));
+    this.fetchBlocks([selectedBlock]);
+    const { fetchedBlocks, pending, etherPrice, fetchInProgress } = this.state;
 
-    if (!block) {
+    let block = fetchedBlocks[selectedBlock];
+
+    if (!block && !fetchInProgress) {
       block = pending;
     }
 
@@ -131,18 +173,30 @@ class App extends Component {
       );
     }
 
-    return <EtherBlockBox {...block} hideNext={block === pending} />;
+    return (
+      <div className="App-content">
+        <EtherBlockBox
+          {...block}
+          hideNext={block === pending}
+          etherPrice={etherPrice}
+        />
+      </div>
+    );
   }
 
   renderBlocks() {
     const { blocks, pending } = this.state;
     return (
-      <EtherBlockPanel>
-        {blocks
-          .map(block => [block, false])
-          .concat([[pending, true]])
-          .map(([block, pending]) => this.renderBlock(block, pending))}
-      </EtherBlockPanel>
+      <div className="App-content">
+        <EtherBlockPanel>
+          {blocks
+            .slice(-4)
+            .map(block => [block, false])
+            .concat([[pending, true]])
+            .reverse()
+            .map(([block, pending]) => this.renderBlock(block, pending))}
+        </EtherBlockPanel>
+      </div>
     );
   }
 

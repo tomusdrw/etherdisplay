@@ -2,16 +2,20 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+#root,
+html,
+body {
+  height: 100%;
+}
 
 a {
-  color: #000000;
+  color: #1f97de;
   text-decoration: none;
   transition: color 0.3s linear;
 }
 
 a:hover {
   color: #f76725;
-  transition: color 0.3s linear;
 }
 
 button {

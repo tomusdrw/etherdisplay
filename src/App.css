@@ -1,3 +1,13 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.App-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
 }

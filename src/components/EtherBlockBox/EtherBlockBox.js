@@ -1,8 +1,11 @@
 /* @flow */
 import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
+import BigNumber from "bignumber.js";
 
-import { formatWithComma, hexToBigNum } from "../../utils/number";
+import Hash from "../Hash";
+import { timeSince } from "../../utils/date";
+import { formatWithComma, hexToBigNum, toAscii } from "../../utils/number";
 import "./EtherBlockBox.css";
 
 type Props = {
@@ -18,6 +21,7 @@ type Props = {
   totalDifficulty: BigNumber,
   number: BigNumber,
   transactions: any,
+  etherPrice: number,
   hideNext: boolean
 };
 
@@ -42,20 +46,30 @@ export default class EtherBlockBox extends PureComponent<Props> {
           </Link>
         </div>
         {this.renderMenu()}
-        {tab === "details" ? this.renderDetails() : null}
-        {tab === "transactions" ? this.renderTransactions() : null}
+        <div className="EtherBlockBox-content">
+          {tab === "details" ? this.renderDetails() : null}
+          {tab === "transactions" ? this.renderTransactions() : null}
+        </div>
       </div>
     );
   }
 
   renderMenu() {
     const { transactions } = this.props;
+    const { tab } = this.state;
+
     return (
-      <div className="Menu">
-        <button onClick={() => this.setState({ tab: "details" })}>
+      <div className="EtherBlockBox-buttons">
+        <button
+          className={tab === "details" ? "active" : ""}
+          onClick={() => this.setState({ tab: "details" })}
+        >
           DETAILS
         </button>
-        <button onClick={() => this.setState({ tab: "transactions" })}>
+        <button
+          className={tab === "transactions" ? "active" : ""}
+          onClick={() => this.setState({ tab: "transactions" })}
+        >
           TRANSACTIONS ({transactions.length})
         </button>
       </div>
@@ -74,17 +88,25 @@ export default class EtherBlockBox extends PureComponent<Props> {
       totalDifficulty
     } = this.props;
     return (
-      <div>
-        <Item label="Parent Hash">{parentHash}</Item>
-        <Item label="Hash">{hash}</Item>
-        <Item label="Timestamp">{timestamp.toString()}</Item>
-        <Item label="Author">{author}</Item>
-        <Item label="Extra Data">{extraData}</Item>
-        <Item label="Size">{hexToBigNum(size).toFormat(0)} bytes</Item>
-        <Item label="Gas Used">{this.renderGasUsed()}</Item>
-        <Item label="Difficulty">{difficulty.toFormat(0)}</Item>
-        <Item label="Total Difficulty">{totalDifficulty.toFormat(0)}</Item>
-      </div>
+      <table className="EtherBlockBox-details">
+        <tbody>
+          <Item label="Parent Hash">{parentHash}</Item>
+          <Item label="Hash">{hash}</Item>
+          <Item label="Timestamp">
+            {timestamp.toString()} ({timeSince(timestamp)})
+          </Item>
+          <Item label="Author">
+            <Link to={`/account/${author}`}>{author}</Link>
+          </Item>
+          <Item label="Extra Data">
+            {toAscii(extraData)} ({extraData})
+          </Item>
+          <Item label="Size">{hexToBigNum(size).toFormat(0)} bytes</Item>
+          <Item label="Gas Used">{this.renderGasUsed()}</Item>
+          <Item label="Difficulty">{difficulty.toFormat(0)}</Item>
+          <Item label="Total Difficulty">{totalDifficulty.toFormat(0)}</Item>
+        </tbody>
+      </table>
     );
   }
 
@@ -96,24 +118,6 @@ export default class EtherBlockBox extends PureComponent<Props> {
       <span>
         {gasUsed.toFormat(0)} / {gasLimit.toFormat(0)} ({gasPercentage.toFormat(2)}%)
       </span>
-    );
-  }
-
-  renderTransactions() {
-    const { transactions } = this.props;
-    if (!transactions.length) {
-      return <div>There are no transactions in this block.</div>;
-    }
-
-    return (
-      <div style={{ textAlign: "left " }}>
-        {transactions.map((tx, id) => (
-          <div key={tx.hash}>
-            <div>#{id + 1}</div>
-            <pre>{JSON.stringify(tx, null, 2)}</pre>
-          </div>
-        ))}
-      </div>
     );
   }
 
@@ -145,13 +149,102 @@ export default class EtherBlockBox extends PureComponent<Props> {
       </Link>
     );
   }
+
+  renderTransactions() {
+    const { transactions, etherPrice } = this.props;
+    if (!transactions.length) {
+      return <div>There are no transactions in this block.</div>;
+    }
+
+    return (
+      <table className="Transactions-table">
+        <thead>
+          <tr>
+            <td />
+            <td>hash</td>
+            <td>from</td>
+            <td>value</td>
+            <td>to</td>
+            <td>gas</td>
+            <td>gas price (fee)</td>
+            <td>data</td>
+          </tr>
+        </thead>
+        <tbody>
+          {transactions.map((tx, id) => (
+            <Transaction
+              key={tx.hash}
+              transaction={tx}
+              etherPrice={etherPrice}
+              idx={id}
+            />
+          ))}
+        </tbody>
+      </table>
+    );
+  }
 }
 
 function Item({ label, children }) {
   return (
-    <div className="Item">
-      <div className="Item-label">{label}: </div>
-      <div className="Item-content">{children}</div>
-    </div>
+    <tr className="Item">
+      <td className="Item-label">{label}: </td>
+      <td className="Item-content">{children}</td>
+    </tr>
+  );
+}
+
+function Transaction({ transaction: tx, etherPrice, idx }) {
+  const value = hexToBigNum(tx.value);
+  const gas = hexToBigNum(tx.gas);
+  const gasPrice = hexToBigNum(tx.gasPrice);
+  const gwei = new BigNumber("1e9");
+  const ether = new BigNumber("1e18");
+
+  return (
+    <tr className="Transactions-row">
+      <td>{idx}.</td>
+      <td>
+        <Link to={`/transaction/${tx.hash}`}>
+          <Hash hash={tx.hash} short />
+        </Link>
+      </td>
+      <td>
+        <Link to={`/account/${tx.from}`}>
+          <Hash hash={tx.from} />
+        </Link>{" "}
+        →
+      </td>
+      <td title={tx.value} className="Transactions-value">
+        <div>{value.dividedBy(ether).toFormat(5)}Ξ</div>
+        <small>
+          ${value
+            .mul(etherPrice)
+            .dividedBy(ether)
+            .toFormat(5)}
+        </small>
+      </td>
+      <td>
+        ↦{" "}
+        {tx.to ? (
+          <Link to={`/account/${tx.to}`}>
+            <Hash hash={tx.to} />
+          </Link>
+        ) : (
+          <Link to={`/account/${tx.to}`}>(New Contract)</Link>
+        )}
+      </td>
+      <td>{gas.dividedBy(1e4).toFormat(2)} kgas</td>
+      <td>
+        {gasPrice.dividedBy(gwei).toFormat(2)} Gwei (${gasPrice
+          .mul(etherPrice)
+          .mul(gas)
+          .dividedBy(ether)
+          .toFormat(5)})
+      </td>
+      <td className="Transactions-code">
+        <code>{tx.input}</code>
+      </td>
+    </tr>
   );
 }

@@ -7,10 +7,15 @@
 .TopBar-left {
   display: flex;
   flex-grow: 1;
+  justify-content: flex-start;
 }
 
-.TopBar-left :nth-child(2) {
-  flex-grow: 1;
+.TopBar-left > * {
+  white-space: nowrap;
+}
+.TopBar-left > *,
+.TopBar-right > * {
+  margin: 0.5rem;
 }
 
 .TopBar-right {
@@ -20,4 +25,5 @@
 
 .TopBar-right :nth-child(2) {
   margin-left: auto;
+  white-space: nowrap;
 }

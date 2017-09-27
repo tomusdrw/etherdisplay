@@ -36,24 +36,27 @@ export default class EtherBlock extends PureComponent<Props> {
     const gasPercentage = gas * 100 / gasMax;
     const strGasPercentage = gasPercentage.toFixed(2);
     const progressValue = gasPercentage / 100;
-    const pendingText = pending ? <p className="transaction">pending</p> : null;
+    const pendingText = pending ? "pending" : null;
 
     // TODO: move to willReaciveProps
     const ago = timeSince(created);
     const blockId = formatWithComma(id);
 
     const main = pending ? (
-      <p>pending</p>
+      <p>Block Pending</p>
     ) : (
       <div>
         <p>
           {" "}
           <Hash hash={chain} />{" "}
         </p>
-        <p> {ago} </p>
+        <p title={created}> {ago} </p>
         <p>
           {" "}
-          Author: <Hash hash={author} />{" "}
+          Author:
+          <Link to={`/account/${author}`}>
+            <Hash hash={author} />
+          </Link>
         </p>
         <p>
           Gas: {formatWithComma(gas)} / {formatWithComma(gasMax)} ({strGasPercentage}%)
@@ -71,10 +74,11 @@ export default class EtherBlock extends PureComponent<Props> {
         </header>
         <section>{main}</section>
         <footer>
-          <Link to={`/block/${id}/transactions`}>
-            <p className="transaction">{transactionNo} transactions</p>
+          <Link to={`/block/${id}`}>
+            <p className="transaction">
+              {transactionNo} transactions {pendingText}
+            </p>
           </Link>
-          {pendingText}
         </footer>
       </article>
     );

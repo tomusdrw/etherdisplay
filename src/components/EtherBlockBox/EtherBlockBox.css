@@ -1,11 +1,17 @@
 .EtherBlockBox {
-  position: fixed;
+  position: relative;
   display: flex;
   flex-direction: column;
-  width: 700px;
-  height: 450px;
+  width: 80%;
+  min-width: 500px;
+  max-width: 1400px;
+  height: 75%;
+  min-height: 600px;
+  max-height: 1500px;
   border: 1px solid #000000;
   border-radius: 12px;
+  align-self: flex-start;
+  margin: 1rem;
 }
 
 .EtherBlockBox-topbar {
@@ -13,6 +19,47 @@
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid #000000;
+}
+
+.EtherBlockBox-topbar h2 {
+  font-weight: 100;
+  width: 12rem;
+}
+
+.EtherBlockBox-buttons {
+  display: flex;
+}
+
+.EtherBlockBox-buttons button {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  text-align: right;
+}
+
+.EtherBlockBox-buttons button:first-child {
+  border-left: none;
+}
+
+.EtherBlockBox-buttons button.active {
+  border: none;
+}
+
+.EtherBlockBox-buttons button + button {
+  text-align: left;
+  border-right: none;
+}
+
+.EtherBlockBox-content {
+  flex: 1;
+  overflow: auto;
+  max-width: 100%;
+  padding: 1rem 0.5rem;
+  margin: 2px;
+  display: flex;
+  flex-direction: column;
+}
+.EtherBlockBox-details {
+  margin: auto;
 }
 
 .EtherBlockBox-button-export {
@@ -61,12 +108,12 @@
 }
 
 .EtherBlockBox-arrow-next {
-  border-width: 0 0.2rem 0.2rem 0;
+  border-width: 0 0.1rem 0.1rem 0;
   transform: rotate(-45deg);
 }
 
 .EtherBlockBox-arrow-prev {
-  border-width: 0.2rem 0 0 0.2rem;
+  border-width: 0.1rem 0 0 0.1rem;
   transform: rotate(-45deg);
 }
 
@@ -82,4 +129,46 @@
 }
 .Item-content {
   display: inline-block;
+}
+.Transactions-table {
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: auto;
+  align-self: flex-start;
+}
+
+.Transactions-table thead td {
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+}
+.Transactions-row td {
+  padding: 1rem 0.5rem;
+  white-space: nowrap;
+}
+.Transactions-row small {
+  opacity: 0.9;
+  font-size: 0.6rem;
+}
+.Transactions-code {
+  max-width: 90px;
+  font-size: 0.6rem;
+  overflow: auto;
+}
+.Transactions-row:nth-child(even) {
+  background: #eee;
+}
+td.Transactions-value {
+  text-align: center;
+  padding-bottom: 0.5rem;
+}
+.Transactions-code::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.Transactions-code::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border: 0px none #ffffff;
+  border-radius: 15px;
 }

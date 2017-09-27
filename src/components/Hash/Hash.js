@@ -3,16 +3,21 @@ import React, { PureComponent } from "react";
 import "./Hash.css";
 
 type Props = {
-  hash: string
+  hash: string,
+  short: ?boolean
 };
 
 export default class ProgressBar extends PureComponent<Props> {
+  static defaultProps = {
+    short: false
+  };
+
   render() {
-    const { hash } = this.props;
+    const { hash, short } = this.props;
     const parts = hash.split("");
 
-    const init = parts.slice(0, 8).join("");
-    const end = parts.slice(-3).join("");
+    const init = parts.slice(0, short ? 4 : 8).join("");
+    const end = parts.slice(short ? -2 : -3).join("");
 
     return (
       <span className="Hash" title={hash}>
