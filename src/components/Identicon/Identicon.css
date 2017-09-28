@@ -1,0 +1,5 @@
+.Identicon {
+  margin: 1rem;
+  border-radius: 50%;
+  box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
+}

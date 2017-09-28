@@ -16,8 +16,8 @@
   "dependencies": {
     "@parity/parity.js": "^1.8.11",
     "bignumber.js": "^4.0.4",
+    "blockies": "^0.0.2",
     "lodash": "^4.17.4",
-    "ethereum-blockies": "^0.1.1",
     "normalize.css": "^7.0.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

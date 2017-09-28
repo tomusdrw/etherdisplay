@@ -1,0 +1,46 @@
+.Account {
+  align-self: flex-start;
+}
+
+.Account-code textarea {
+  width: 100%;
+  padding: 0.5rem;
+  background: #eee;
+  font-size: 0.8rem;
+  color: #666;
+  height: 7rem;
+}
+
+.Account h5,
+.Account h1,
+.Account h3,
+.Account h4 {
+  font-weight: 100;
+}
+
+.Account h2 {
+  margin-bottom: 0;
+}
+
+.Account-header {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+  margin: auto;
+  justify-content: center;
+}
+
+.Account-left {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Account-right {
+  text-align: right;
+  white-space: nowrap;
+}
+.Account-transactions h4 {
+  margin-bottom: 0;
+  font-weight: 300;
+}

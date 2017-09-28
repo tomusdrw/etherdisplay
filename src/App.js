@@ -5,6 +5,8 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import TopBar from "./components/TopBar";
+import Search from "./components/Search";
+import Account from "./components/Account";
 import EtherBlock from "./components/EtherBlock";
 import EtherBlockBox from "./components/EtherBlockBox";
 import EtherBlockPanel from "./components/EtherBlockPanel";
@@ -17,6 +19,7 @@ class App extends Component {
   state = {
     latestBlockNumber: 0,
     blocks: [],
+    fetchedAccounts: {},
     fetchedBlocks: {},
     fetchInProgress: false,
     pending: null,
@@ -41,9 +44,9 @@ class App extends Component {
   }
 
   refreshBlocks(number) {
-    const min = Math.max(0, number - 10);
+    const min = Math.max(0, number - 15);
     this.fetchBlocks(
-      range(min, number).concat("pending"),
+      range(min, number).concat(["pending"]),
       true
     ).then(blocks => {
       const pending = blocks.pop();
@@ -52,6 +55,23 @@ class App extends Component {
         blocks,
         pending,
         ...this.getStats(blocks)
+      });
+
+      // update accounts
+      const { fetchedAccounts } = this.state;
+
+      Object.keys(fetchedAccounts).forEach(address => {
+        fetchedAccounts[address].transactions = this.findTransactions(
+          address,
+          blocks,
+          pending
+        );
+      });
+
+      this.setState({
+        fetchedAccounts: {
+          ...fetchedAccounts
+        }
       });
     });
   }
@@ -78,6 +98,62 @@ class App extends Component {
     return Promise.all(blocks).then(blocks => {
       this.updateFetchedBlocks(blocks);
       return blocks;
+    });
+  }
+
+  findTransactions(
+    address,
+    blocks = this.state.blocks,
+    pending = this.state.pending
+  ) {
+    const allTransactions = blocks
+      .concat([pending])
+      .filter(x => x)
+      .reduce((acc, block) => acc.concat(block.transactions), []);
+
+    return allTransactions.filter(
+      tx =>
+        tx.from.toLowerCase() === address ||
+        (tx.to ? tx.to.toLowerCase() === address : false)
+    );
+  }
+
+  fetchAccount(address) {
+    if (!this.api) {
+      return;
+    }
+
+    const { fetchedAccounts, fetchInProgress } = this.state;
+
+    if (fetchedAccounts[address]) {
+      return;
+    }
+
+    if (!fetchInProgress) {
+      setTimeout(() => {
+        this.setState({ fetchInProgress: true });
+      });
+    }
+
+    const accountData = [
+      this.api.eth.getCode(address),
+      this.api.eth.getBalance(address),
+      this.api.eth.getTransactionCount(address)
+    ];
+
+    return Promise.all(accountData).then(data => {
+      const [code, balance, nonce] = data;
+
+      // Get transactions:
+      const transactions = this.findTransactions(address);
+
+      this.setState({
+        fetchInProgress: false,
+        fetchedAccounts: {
+          ...fetchedAccounts,
+          [address]: { address, code, balance, nonce, transactions }
+        }
+      });
     });
   }
 
@@ -146,12 +222,51 @@ class App extends Component {
           <Switch>
             <Route exact path="/" render={() => this.renderBlocks()} />
             <Route
-              path="/block/:id"
-              render={({ match }) => this.renderDetails(match.params.id)}
+              path="/block/:number"
+              render={({ match }) => this.renderDetails(match.params.number)}
+            />
+            <Route
+              path="/account/:address"
+              render={({ match }) => this.renderAccount(match.params.address)}
+            />
+            <Route
+              path="/transaction/:hash"
+              render={({ match }) => this.renderTransaction(match.params.hash)}
             />
           </Switch>
+          <Search />
         </div>
       </Router>
+    );
+  }
+
+  renderTransaction(hash) {
+    return (
+      <div className="App-content">
+        <p>{hash}</p>
+      </div>
+    );
+  }
+
+  renderAccount(address) {
+    address = address.toLowerCase();
+    this.fetchAccount(address);
+    const { fetchedAccounts, fetchInProgress, etherPrice, blocks } = this.state;
+
+    const account = fetchedAccounts[address];
+
+    if (!account || !blocks.length) {
+      return (
+        <div>
+          <h1>{fetchInProgress ? "Loading..." : "Not found"}</h1>
+        </div>
+      );
+    }
+
+    return (
+      <div className="App-content">
+        <Account {...account} etherPrice={etherPrice} />
+      </div>
     );
   }
 
@@ -186,13 +301,14 @@ class App extends Component {
 
   renderBlocks() {
     const { blocks, pending } = this.state;
+    const last = blocks[blocks.length - 1];
     return (
       <div className="App-content">
         <EtherBlockPanel>
           {blocks
             .slice(-4)
             .map(block => [block, false])
-            .concat([[pending, true]])
+            .concat(last !== pending ? [[pending, true]] : [])
             .reverse()
             .map(([block, pending]) => this.renderBlock(block, pending))}
         </EtherBlockPanel>

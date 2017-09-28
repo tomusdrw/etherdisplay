@@ -14,12 +14,7 @@ export function formatWithComma(n: number): string {
 
 export function hexToBigNum(hex: string): BigNumber {
   if (hex.startsWith("0x")) {
-    return hexToBigNum(
-      hex
-        .split("")
-        .slice(2)
-        .join("")
-    );
+    return hexToBigNum(hex.substr(2));
   }
 
   return new BigNumber(hex, 16);
@@ -27,12 +22,7 @@ export function hexToBigNum(hex: string): BigNumber {
 
 export function toAscii(hex: string) {
   if (hex.startsWith("0x")) {
-    return toAscii(
-      hex
-        .split("")
-        .slice(2)
-        .join("")
-    );
+    return toAscii(hex.substr(2));
   }
 
   return chunk(hex.split(""), 2)
