@@ -474,7 +474,7 @@ class App extends Component {
       <div className="App-content">
         <EtherBlockPanel>
           {blocks
-            .slice(-4)
+            .slice(-10)
             .map(block => [block, false])
             .concat(last !== pending ? [[pending, true]] : [])
             .reverse()
