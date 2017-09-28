@@ -492,6 +492,7 @@ class App extends Component {
     const {
       author,
       hash,
+      parentHash,
       gasUsed,
       gasLimit,
       number,
@@ -503,7 +504,8 @@ class App extends Component {
         key={hash}
         id={number}
         author={author}
-        chain={hash}
+        hash={hash}
+        parentHash={parentHash}
         created={timestamp}
         gas={gasUsed.toNumber()}
         gasMax={gasLimit.toNumber()}

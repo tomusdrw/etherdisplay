@@ -38,7 +38,6 @@ export default class EtherBlockBox extends PureComponent<Props> {
     return (
       <div className="EtherBlockBox">
         <div className="EtherBlockBox-topbar">
-          <button className="EtherBlockBox-button-export">JSON</button>
           {this.renderPrevButton()}
           <h2> Block #{formatWithComma(number)} </h2>
           {this.renderNextButton()}

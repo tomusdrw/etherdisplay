@@ -14,6 +14,11 @@ export default class ProgressBar extends PureComponent<Props> {
 
   render() {
     const { hash, short } = this.props;
+
+    if (!hash) {
+      return <span className="Hash">{hash}</span>;
+    }
+
     const parts = hash.split("");
 
     const init = parts.slice(0, short ? 4 : 8).join("");

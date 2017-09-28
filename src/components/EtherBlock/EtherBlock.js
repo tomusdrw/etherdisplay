@@ -11,8 +11,9 @@ import "./EtherBlock.css";
 
 type Props = {
   id: number,
-  author: number,
-  chain: number,
+  author: string,
+  hash: string,
+  parentHash: string,
   created: Date,
   gas: number,
   gasMax: number,
@@ -24,7 +25,8 @@ export default class EtherBlock extends PureComponent<Props> {
   render() {
     const {
       author,
-      chain,
+      hash,
+      parentHash,
       created,
       gas,
       gasMax,
@@ -43,17 +45,28 @@ export default class EtherBlock extends PureComponent<Props> {
     const blockId = formatWithComma(id);
 
     const main = pending ? (
-      <p>Block Pending</p>
+      <div>
+        <p>
+          <strong>Pending Block</strong>
+        </p>
+        <p>
+          Hash: <Hash hash={hash} />{" "}
+        </p>
+        <p>
+          Parent: <Hash hash={parentHash} />{" "}
+        </p>
+      </div>
     ) : (
       <div>
         <p>
-          {" "}
-          <Hash hash={chain} />{" "}
+          Hash: <Hash hash={hash} />{" "}
+        </p>
+        <p>
+          Parent: <Hash hash={parentHash} />{" "}
         </p>
         <p title={created}> {ago} </p>
         <p>
-          {" "}
-          Author:
+          Author:{" "}
           <Link to={`/account/${author}`}>
             <Hash hash={author} />
           </Link>
@@ -68,9 +81,9 @@ export default class EtherBlock extends PureComponent<Props> {
     return (
       <article className="EtherBlock">
         <header>
-          <h1>
+          <h2>
             <Link to={`/block/${id}`}>Block #{blockId}</Link>
-          </h1>
+          </h2>
         </header>
         <section>{main}</section>
         <footer>
