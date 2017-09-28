@@ -2,8 +2,10 @@
 import { Api } from "@parity/parity.js";
 import { range } from "lodash";
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import BigNumber from "bignumber.js";
 
+import Hash from "./components/Hash";
 import TopBar from "./components/TopBar";
 import Search from "./components/Search";
 import Account from "./components/Account";
@@ -21,6 +23,7 @@ class App extends Component {
     blocks: [],
     fetchedAccounts: {},
     fetchedBlocks: {},
+    fetchedTransactions: {},
     fetchInProgress: false,
     pending: null,
     chain: "kovan",
@@ -157,6 +160,40 @@ class App extends Component {
     });
   }
 
+  fetchTransaction(hash) {
+    if (!this.api) {
+      return;
+    }
+
+    const { fetchedTransactions, fetchInProgress } = this.state;
+
+    if (fetchedTransactions[hash]) {
+      return;
+    }
+
+    if (!fetchInProgress) {
+      setTimeout(() => {
+        this.setState({ fetchInProgress: true });
+      });
+    }
+
+    const data = [
+      this.api.eth.getTransactionReceipt(hash),
+      this.api.eth.getTransactionByHash(hash)
+    ];
+    return Promise.all(data).then(d => {
+      const [receipt, tx] = d;
+
+      this.setState({
+        fetchInProgress: false,
+        fetchedTransactions: {
+          ...fetchedTransactions,
+          [hash]: { receipt, tx }
+        }
+      });
+    });
+  }
+
   updateFetchedBlocks(blocks) {
     const { fetchedBlocks } = this.state;
     blocks.forEach(block => {
@@ -241,9 +278,140 @@ class App extends Component {
   }
 
   renderTransaction(hash) {
+    this.fetchTransaction(hash);
+
+    const { fetchedTransactions, fetchInProgress, etherPrice } = this.state;
+
+    const transaction = fetchedTransactions[hash];
+
+    if (!transaction) {
+      return (
+        <div>
+          <h1>{fetchInProgress ? "Loading..." : "Not found"}</h1>
+        </div>
+      );
+    }
+
+    const { receipt, tx } = transaction;
+
+    const gwei = new BigNumber("1e9");
+    const ether = new BigNumber("1e18");
+
     return (
       <div className="App-content">
-        <p>{hash}</p>
+        <div className="Transaction">
+          <h1>
+            Transaction <Hash hash={hash} />
+          </h1>
+          <table>
+            <tr>
+              <th>block</th>
+              <td>
+                <Link to={`/block/${receipt.blockNumber}`}>
+                  #{receipt.blockNumber.toFormat(0)}{" "}
+                  <small>
+                    (<Hash hash={receipt.blockHash} short />)
+                  </small>
+                </Link>
+              </td>
+            </tr>
+            <tr>
+              <th>from</th>
+              <td>
+                <Link to={`/account/${tx.from}`}>{tx.from}</Link>
+              </td>
+            </tr>
+            {tx.to ? (
+              <tr>
+                <th>to</th>
+                <td>
+                  <Link to={`/account/${tx.to}`}>{tx.to}</Link>
+                </td>
+              </tr>
+            ) : null}
+            {receipt.contractAddress ? (
+              <tr>
+                <th>contract address:</th>
+                <td>
+                  <Link to={`/account/${receipt.contractAddress}`}>
+                    {receipt.contractAddress}
+                  </Link>
+                </td>
+              </tr>
+            ) : null}
+            <tr>
+              <th>value</th>
+              <td>
+                {tx.value.dividedBy(ether).toFormat(4)} Ξ (${tx.value
+                  .mul(etherPrice)
+                  .dividedBy(ether)
+                  .toFormat(5)})
+              </td>
+            </tr>
+            <tr>
+              <th>gas used</th>
+              <td
+                title={`Cumulative: ${receipt.cumulativeGasUsed.toFormat(0)}`}
+              >
+                {receipt.gasUsed.toFormat(0)} / {tx.gas.toFormat(0)}
+              </td>
+            </tr>
+            <tr>
+              <th>gas price</th>
+              <td>
+                {tx.gasPrice.dividedBy(gwei).toFormat(2)} Gwei{" "}
+                <small>
+                  (${tx.gasPrice
+                    .mul(receipt.gasUsed)
+                    .mul(etherPrice)
+                    .dividedBy(ether)
+                    .toFormat(5)})
+                </small>
+              </td>
+            </tr>
+            <tr>
+              <th>data</th>
+              <td>
+                <textarea
+                  readOnly
+                  defaultValue={tx.input}
+                  style={{ height: "1.5rem" }}
+                />
+              </td>
+            </tr>
+            <tr>
+              <th>logs</th>
+              <td>
+                <textarea
+                  readOnly
+                  defaultValue={JSON.stringify(receipt.logs, null, 2)}
+                />
+              </td>
+            </tr>
+            <tr>
+              <th>public key</th>
+              <td>
+                <textarea
+                  readOnly
+                  defaultValue={tx.publicKey}
+                  style={{ height: "1rem" }}
+                />
+              </td>
+            </tr>
+            <tr>
+              <th>raw receipt</th>
+              <td>
+                <textarea defaultValue={JSON.stringify(receipt, null, 2)} />
+              </td>
+            </tr>
+            <tr>
+              <th>raw transaction</th>
+              <td>
+                <textarea defaultValue={JSON.stringify(tx, null, 2)} />
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
     );
   }

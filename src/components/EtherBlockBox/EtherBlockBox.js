@@ -28,7 +28,7 @@ type Props = {
 
 export default class EtherBlockBox extends PureComponent<Props> {
   state = {
-    tab: "details"
+    tab: "transactions"
   };
 
   render() {

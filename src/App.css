@@ -11,3 +11,37 @@
   justify-content: center;
   overflow: auto;
 }
+
+.Transaction {
+  align-self: flex-start;
+  width: 80%;
+  min-width: 500px;
+  max-width: 1400px;
+}
+.Transaction table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.Transaction th,
+.Transaction td {
+  padding: 1rem;
+}
+.Transaction th {
+  text-align: right;
+  white-space: nowrap;
+}
+.Transaction td {
+  text-align: left;
+}
+.Transaction tr:nth-child(even) {
+  background: #eee;
+}
+.Transaction textarea {
+  font-size: 0.6rem;
+  border: none;
+  padding: 0.5rem;
+  background: #eee;
+  color: #444;
+  width: 100%;
+  height: 6rem;
+}
