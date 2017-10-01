@@ -6,6 +6,7 @@
   flex-direction: column;
   border: 1px solid;
   border-radius: 5%;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
 }
 
 .EtherBlock header {

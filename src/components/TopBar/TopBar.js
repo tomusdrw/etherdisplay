@@ -58,11 +58,8 @@ export default class Header extends PureComponent<Props> {
         </div>
         <div className="TopBar-right">
           <span>
-            Processing {averageTxs.toFixed(2)} transactions per block with
-            average gas price of {averageGasPrice
-              .dividedBy(gwei)
-              .toFormat(2)}{" "}
-            Gwei (${averageGasPrice
+            {averageTxs.toFixed(2)} txs per block with avg gas price of{" "}
+            {averageGasPrice.dividedBy(gwei).toFormat(2)} Gwei (${averageGasPrice
               .mul(etherPrice)
               .mul(transfer)
               .dividedBy(ether)

@@ -58,7 +58,7 @@ export default function Transaction({
             <Hash hash={tx.to} />
           </Link>
         ) : (
-          <Link to={`/account/${tx.to}`}>(New Contract)</Link>
+          <Link to={`/account/${tx.creates}`}>(New Contract)</Link>
         )}
       </td>
       <td>{gas.dividedBy(1e4).toFormat(2)} kgas</td>

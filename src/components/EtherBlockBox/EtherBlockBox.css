@@ -12,6 +12,7 @@
   border-radius: 12px;
   align-self: flex-start;
   margin: 1rem;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
 }
 
 .EtherBlockBox-topbar {
@@ -123,7 +124,7 @@
 }
 .Item-label {
   display: inline-block;
-  width: 7rem;
+  width: 8rem;
   text-align: right;
   margin-right: 0.2rem;
 }

@@ -176,7 +176,7 @@ export default class EtherBlockBox extends PureComponent<Props> {
               key={tx.hash}
               transaction={tx}
               etherPrice={etherPrice}
-              idx={id}
+              idx={id + 1}
             />
           ))}
         </tbody>
