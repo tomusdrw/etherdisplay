@@ -2,7 +2,13 @@
 import { Api } from "@parity/parity.js";
 import { range } from "lodash";
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Link,
+  Redirect
+} from "react-router-dom";
 import BigNumber from "bignumber.js";
 
 import Hash from "./components/Hash";
@@ -270,8 +276,17 @@ class App extends Component {
               path="/transaction/:hash"
               render={({ match }) => this.renderTransaction(match.params.hash)}
             />
+            <Redirect from="*" to="/" />
           </Switch>
           <Search />
+          <div>
+            <pre style={{ background: "#eee" }}>
+              $ git clone --depth=1 -b built
+              https://github.com/tomusdrw/etherdisplay
+            </pre>
+            Get a local version of the dapp (for private chain).
+            <p />
+          </div>
         </div>
       </Router>
     );
